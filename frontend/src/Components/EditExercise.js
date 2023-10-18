@@ -20,11 +20,12 @@ const EditExercise = () => {
   const [formData, dispatch] = useReducer(reducer,{});
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/exercises/${id}`)
+    axios.get(`${process.env.REACT_APP_BASE_URL}/exercises/${id}`)
       .then(res => { 
+        console.log(res.data)
         dispatch({name:'username' , value: res.data.username})
         dispatch({name:'description', value: res.data.description})
-        dispatch({name:'activity', value: res.data.activityname})
+        dispatch({name:'activity', value: res.data.activity})
         dispatch({name:'duration', value: res.data.duration})
         dispatch({name:'date',value: res.data.date.slice(0,10)})
       })
@@ -34,7 +35,7 @@ const EditExercise = () => {
     event.preventDefault();
     console.log(formData);
 
-    axios.post(`http://localhost:3001/exercises/update/${id}`,formData)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/exercises/update/${id}`,formData)
     .then(console.log('Updated Exercise'))
     .catch(error => console.log(error));
 
@@ -42,7 +43,7 @@ const EditExercise = () => {
   }
 
   useEffect(()=>{
-    axios.get('http://localhost:3001/activity')
+    axios.get(`${process.env.REACT_APP_BASE_URL}/activity`)
     .then(res => setExercises(res.data))
     .catch(error => console.log(error))
   },[])
@@ -65,17 +66,36 @@ const EditExercise = () => {
         <div className="my-8">
           <label>Username:</label>
           <br/>
-          <input type="text" name="username"  onChange={handleChange} value={formData.username }className="border-[0.5px] border-black rounded-lg w-4/12" required/>
+          <input 
+            type="text" 
+            name="username"  
+            onChange={handleChange} 
+            value={formData.username} 
+            className="border-[0.5px] border-black rounded-lg w-4/12" 
+            required/>
         </div>
 
         <div className="my-8">
           <label>Activity:</label>
           <br/>
-          <select name='activity' onChange={handleChange} required>
-          <option value="" >Select an activity</option>
+          <select 
+          name='activity' 
+          onChange={handleChange} 
+          value={formData.activity}
+          required
+          >
             {
               exercises.map(item => {
-                return(<option value={item.activityname}>{item.activityname}</option>)
+
+                return(
+                  <option 
+                  key={exercises.indexOf(item)} 
+                  value={item.activityname}
+                  >
+                    {item.activityname}
+                  </option>
+
+                )
               })
             }
           </select>
@@ -84,19 +104,37 @@ const EditExercise = () => {
         <div className="my-8">
           <label>Description:</label>
           <br/>
-          <textarea name="description"  onChange={handleChange}  value={formData.description} className="border-[0.5px] border-black rounded-lg w-8/12" required></textarea>
+          <textarea 
+          name="description"  
+          onChange={handleChange}  
+          value={formData.description} 
+          className="border-[0.5px] border-black rounded-lg w-8/12" 
+          required/>
+        
         </div>
 
         <div className="my-8">
           <label>Duration:</label>
           <br/>
-          <input type="number" name="duration"  onChange={handleChange}  value={formData.duration } className="border-[0.5px] border-black rounded-lg" required />
+          <input 
+            type="number" 
+            name="duration"  
+            onChange={handleChange}  
+            value={formData.duration } 
+            className="border-[0.5px] border-black rounded-lg" 
+            required />
         </div>
 
         <div className="my-8">
           <label>Date:</label>
           <br/>
-          <input type="date" name="date"  onChange={handleChange}  value={formData.date} className="border-[0.5px] border-black rounded-lg" required/>
+          <input 
+           type="date" 
+           name="date"  
+           onChange={handleChange}  
+           value={formData.date} 
+           className="border-[0.5px] border-black rounded-lg" 
+           required/>
         </div>
 
         <button type="submit"  value="Save Changes" disabled={formData==={}} onClick={()=>setTimeout(()=>navigate('/'),1000)} className="button" >Save Changes</button>

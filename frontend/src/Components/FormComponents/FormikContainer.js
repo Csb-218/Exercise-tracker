@@ -11,7 +11,7 @@ function FormikContainer() {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        axios.get('http://localhost:3001/activity')
+        axios.get(`${process.env.REACT_APP_BASE_URL}/activity`)
         .then(res => setSelectOps(res.data))
         .catch(error => console.log(error))
     },[])
@@ -34,7 +34,7 @@ function FormikContainer() {
 
     const onSubmit = val => {
         console.log('Form data', val);
-        axios.post('http://localhost:3001/exercises/add',val)
+        axios.post('process.env.REACT_APP_BASE_URL/exercises/add',val)
         .then(console.log('Successful submission'))
         .catch(error => console.log(error));
         setTimeout(() => navigate('/'),2000)

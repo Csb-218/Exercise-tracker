@@ -7,7 +7,7 @@ const Exercises = () => {
   const [exercises,setExercises]=useState([])
 
   useEffect(()=>{
-    axios.get('http://localhost:3001/activity')
+    axios.get(`${process.env.REACT_APP_BASE_URL}/activity`)
     .then(res => setExercises(res.data))
     .catch(err => console.log(err))
   },[])
@@ -18,7 +18,7 @@ const Exercises = () => {
     <p className=" text-2xl font-light">Exercises</p>
       {
         exercises.map((item)  => {
-          return(<div>{`${exercises.indexOf(item)+1}﹚`} {item.activityname}</div>)
+          return(<div key={exercises.indexOf(item)}>{`${exercises.indexOf(item)+1}﹚`} {item.activityname}</div>)
         
          })
       }

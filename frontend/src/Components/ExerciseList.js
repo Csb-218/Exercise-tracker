@@ -9,17 +9,24 @@ const ExerciseList = () => {
   const [exercise, setEx] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:3001/exercises/')
-      .then(response => setEx(response.data))
-      .catch(err => console.log(err))
+    // console.log(process.env.REACT_APP_BASE_URL)
+    axios.get(`${process.env.REACT_APP_BASE_URL}/exercises`)
+    .then(response => {
+      console.log(response.data , exercise, exercise.length !== response.data)
+      return (
+        (exercise.length !== response.data.length) && setEx(response.data)
+      )
+    })
+    .catch(err => console.log(err))
+
   }, [exercise])
 
   function deleteEx(id) {
     console.log(id);
 
-    axios.delete(`http://localhost:3001/exercises/${id}`)
+    axios.delete(`${process.env.REACT_APP_BASE_URL}/exercises/${id}`)
       .then(response => console.log('Deleted exercise'))
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
 
   }
 
@@ -29,7 +36,12 @@ const ExerciseList = () => {
         <thead>
           <tr className="bg-teal-700 ">
             {
-              tableh.map((item) => <th className=" border-x-4 border-black">{item}</th>)
+              tableh.map(
+                (item) => 
+                <th key={tableh.indexOf(item)} className=" border-x-4 border-black">
+                  {item}
+                </th>
+              )
             }
           </tr>
         </thead>
@@ -38,18 +50,37 @@ const ExerciseList = () => {
           {
             exercise.map((item) => {
               return (
-                <tr >
-                  <td key={item.id}>{item.username}</td>
-                  <td key={item.id}>{item.description}</td>
-                  <td key={item.id}>{item.activity}</td>
-                  <td key={item.id}>{item.duration}</td>
-                  <td key={item.id}>{item.date.slice(0, 10)}</td>
+                <tr key={item._id}>
+                  <td >{item.username}</td>
+                  <td >{item.description}</td>
+                  <td >{item.activity}</td>
+                  <td >{item.duration}</td>
+                  <td >{item.date.slice(0, 10)}</td>
                   <td >
-                    <tr >
-                      <td className="px-1 border-black  border-t-0 hover:underline "><button onClick={()=>navigate(`/edit/${item._id}`)} className='button bg-lime-500 hover:bg-lime-700'>Edit</button></td>
-                      <td className="px-1 border-black  border-t-0 hover:underline ">|</td>
-                      <td className="px-1 border-black  border-t-0 "><button onClick={() => deleteEx(item._id)} className='button bg-red-500 hover:bg-red-700'>Delete</button></td>
-                    </tr>
+                    <table>
+                      <tbody>
+
+                        <tr >
+                      <td className="px-1 border-black  border-t-0 hover:underline ">
+                        <button onClick={()=>navigate(`/edit/${item._id}`)} className='button bg-lime-500 hover:bg-lime-700'>
+                          Edit
+                        </button>
+                      </td>
+                      <td className="px-1 border-black  border-t-0 hover:underline ">
+                        |
+                      </td>
+                      <td className="px-1 border-black  border-t-0 ">
+                        <button 
+                          onClick={() => deleteEx(item._id)} 
+                          className='button bg-red-500 hover:bg-red-700'>
+                          Delete
+                        </button>
+                      </td>
+                      </tr>
+                      </tbody>
+                      
+                    </table>
+                    
                   </td>
 
                 </tr>

@@ -7,7 +7,7 @@ const CreateUser = () => {
   const [users,setusers]=useState([])
 
   useEffect(()=>{
-    axios.get('http://localhost:3001/exercises')
+    axios.get(`${process.env.REACT_APP_BASE_URL}/exercises`)
     .then(res => setusers(res.data))
     .catch(err => console.log(err))
   },[])
@@ -18,7 +18,7 @@ const CreateUser = () => {
         <div className="m-4">
           {
             users.map((item) => {
-              return (<div>{`${users.indexOf(item) + 1}﹚`} {item.username}</div>)
+              return (<div key={users.indexOf(item)}>{`${users.indexOf(item) + 1}﹚`} {item.username}</div>)
 
             })
           }

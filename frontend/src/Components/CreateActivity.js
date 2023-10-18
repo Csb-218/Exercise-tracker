@@ -23,7 +23,7 @@ const CreateActivity = () => {
 
     onSubmit={(values,{setSubmitting}) => {
         
-            axios.post('http://localhost:3001/activity/add', values)
+            axios.post(`${process.env.REACT_APP_BASE_URL}/activity/add`, values)
                 .then(res => console.log(res.data))
                 .catch(err => console.log(err));
 
