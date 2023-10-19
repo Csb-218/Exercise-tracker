@@ -7,25 +7,30 @@ const ExerciseList = () => {
   const navigate = useNavigate();
   const tableh = ['Username', 'Description', 'Activity', 'Duration', 'Date', 'Action'];
   const [exercise, setEx] = useState([])
+  const [deleted,setDeleted] = useState(false)
 
   useEffect(() => {
     // console.log(process.env.REACT_APP_BASE_URL)
     axios.get(`${process.env.REACT_APP_BASE_URL}/exercises`)
     .then(response => {
       console.log(response.data , exercise, exercise.length !== response.data)
+      setDeleted(false)
       return (
         (exercise.length !== response.data.length) && setEx(response.data)
       )
     })
     .catch(err => console.log(err))
 
-  }, [exercise])
+  }, [exercise,deleted])
 
   function deleteEx(id) {
     console.log(id);
 
     axios.delete(`${process.env.REACT_APP_BASE_URL}/exercises/${id}`)
-      .then(response => console.log('Deleted exercise'))
+      .then(response => {
+        setDeleted(true)
+        console.log('Deleted exercise',response)
+      })
       .catch(err => console.error(err));
 
   }

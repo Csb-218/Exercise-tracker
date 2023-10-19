@@ -34,7 +34,7 @@ function FormikContainer() {
 
     const onSubmit = val => {
         console.log('Form data', val);
-        axios.post('process.env.REACT_APP_BASE_URL/exercises/add',val)
+        axios.post(`${process.env.REACT_APP_BASE_URL}/exercises/add`,val)
         .then(console.log('Successful submission'))
         .catch(error => console.log(error));
         setTimeout(() => navigate('/'),2000)
